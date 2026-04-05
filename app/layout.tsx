@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Toolly - Latest Tools",
-  description: "Toolly is a free online platform that provides a wide range of tools for various purposes. From calculators to converters, we have it all.",
+  title: "Toolly – Simple Tools for Everyday Life (Free & Fast)",
+  description:
+    "Free online tools to help you manage money, create invoices, split bills, and more. Fast, simple, and no sign-up required.",
 };
 
 export default function RootLayout({

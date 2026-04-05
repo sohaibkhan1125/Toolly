@@ -96,10 +96,11 @@ const Illustrations = {
   )
 };
 
-const tools = [
+export const tools = [
   {
     title: "Bill Split Calculator",
     description: "Divide expenses easily",
+    keywords: ["bill", "split", "expenses", "divide", "share", "group"],
     icon: <Icons.BillSplit />,
     secondaryIcon: <Illustrations.Sheet />,
     color: "blue",
@@ -108,6 +109,7 @@ const tools = [
   {
     title: "Rent Calculator",
     description: "Find what you can afford",
+    keywords: ["rent", "house", "afford", "apartment", "home", "property", "housing"],
     icon: <Icons.Rent />,
     secondaryIcon: <Illustrations.HouseDetail />,
     color: "green",
@@ -116,6 +118,7 @@ const tools = [
   {
     title: "Salary Calculator",
     description: "See your lifestyle breakdown",
+    keywords: ["salary", "income", "lifestyle", "wage", "pay", "earnings", "budget"],
     icon: <Icons.Salary />,
     secondaryIcon: <Illustrations.Folder />,
     color: "sky",
@@ -124,6 +127,7 @@ const tools = [
   {
     title: "Invoice Generator",
     description: "Create invoices instantly",
+    keywords: ["invoice", "bill", "receipt", "payment", "freelance", "pdf", "generate"],
     icon: <Icons.Invoice />,
     secondaryIcon: <Illustrations.Sheet />,
     color: "slate",
@@ -132,6 +136,7 @@ const tools = [
   {
     title: "Savings Planner",
     description: "Plan your savings goals",
+    keywords: ["savings", "save", "goal", "plan", "invest", "finance", "money", "interest"],
     icon: <Icons.Savings />,
     secondaryIcon: <Illustrations.Checklist />,
     href: "/saving-planner"
@@ -139,29 +144,59 @@ const tools = [
   {
     title: "WhatsApp Formatter",
     description: "Format your messages",
+    keywords: ["whatsapp", "format", "message", "chat", "bold", "text", "bullet"],
     icon: <Icons.WhatsApp />,
     secondaryIcon: <Illustrations.Folder />,
     href: "/whatsapp-message-formatter"
   }
 ];
 
-export default function ToolGrid() {
+interface ToolGridProps {
+  searchQuery?: string;
+}
+
+export default function ToolGrid({ searchQuery = "" }: ToolGridProps) {
+  const filtered = searchQuery.trim()
+    ? tools.filter((tool) => {
+        const q = searchQuery.toLowerCase();
+        return (
+          tool.title.toLowerCase().includes(q) ||
+          tool.description.toLowerCase().includes(q) ||
+          tool.keywords.some((k) => k.includes(q))
+        );
+      })
+    : tools;
+
   return (
     <section className="bg-slate-50 py-16 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {tools.map((tool, index) => (
-            <ToolCard 
-              key={index}
-              title={tool.title}
-              description={tool.description}
-              icon={tool.icon}
-              secondaryIcon={tool.secondaryIcon}
-              color={tool.color}
-              href={tool.href}
-            />
-          ))}
-        </div>
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filtered.map((tool, index) => (
+              <ToolCard
+                key={index}
+                title={tool.title}
+                description={tool.description}
+                icon={tool.icon}
+                secondaryIcon={tool.secondaryIcon}
+                color={tool.color}
+                href={tool.href}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-black text-slate-700">No tools found</h3>
+            <p className="text-slate-400 font-medium text-sm max-w-xs">
+              Try a different keyword like "rent", "invoice", or "split bill".
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
